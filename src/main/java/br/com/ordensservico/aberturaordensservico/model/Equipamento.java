@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 
@@ -15,8 +16,11 @@ public class Equipamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank (message = "O nome do equipamento é obrigatório")
+    private String nome;
 
-    private String nome, numeroPatrimonio;
+    @NotBlank (message = "O número do patrimônio é obrigatório")
+    private String numeroPatrimonio;
 
     @ManyToOne 
     @JoinColumn (name = "setor_id", nullable = false)
@@ -25,6 +29,7 @@ public class Equipamento {
     public Equipamento() {
     }
 
+    
     public Equipamento(String nome, String numeroPatrimonio) {
 
         this.nome = nome;
