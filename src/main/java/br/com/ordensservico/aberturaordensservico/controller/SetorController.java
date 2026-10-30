@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +20,18 @@ import br.com.ordensservico.aberturaordensservico.service.SetorService;
 
 @RestController
 @RequestMapping("/setores")
-@Service 
-public class SetorControler {
+
+public class SetorController {
     private final SetorService setorService;
 
-    public SetorControler(SetorService setorService) {
+    public SetorController(SetorService setorService) {
         this.setorService = setorService;
     }
 
     @PostMapping
     public ResponseEntity<Setor> cadastrar(
             @RequestBody Setor setor) {
-        Setor setorCadastrado = setorService.cadastrarSetor(setor);
+        Setor setorCadastrado = setorService.cadastrar(setor);
         return ResponseEntity.status(HttpStatus.CREATED).body(setorCadastrado);
 
     }
