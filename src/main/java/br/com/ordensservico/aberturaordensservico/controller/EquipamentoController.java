@@ -14,24 +14,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ordensservico.aberturaordensservico.dto.EquipamentoRequest;
 import br.com.ordensservico.aberturaordensservico.model.Equipamento;
 import br.com.ordensservico.aberturaordensservico.service.EquipamentoService;
 import jakarta.validation.Valid;
 
-@RestController 
-@RequestMapping ("/equipamento")
+@RestController
+@RequestMapping("/equipamento")
 public class EquipamentoController {
-     private final EquipamentoService equipamentoService;
+    private final EquipamentoService equipamentoService;
 
     public EquipamentoController(EquipamentoService equipamentoService) {
         this.equipamentoService = equipamentoService;
     }
 
-    @PostMapping 
+    @PostMapping
     public ResponseEntity<Equipamento> cadastrar(
-            @Valid @RequestBody Equipamento equipamento) {
-        Equipamento equipamentoCadastrado = equipamentoService.cadastrar(equipamento);
-        return ResponseEntity.status(HttpStatus.CREATED).body(equipamentoCadastrado);
+            @Valid @RequestBody EquipamentoRequest equipamentoRequest) {
+        Optional<Equipamento> equipamentoCadastrado = equipamentoService.cadastrar(equipamentoRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(equipamentoCadastrado.get());
 
     }
 
@@ -44,13 +46,12 @@ public class EquipamentoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Equipamento> buscarPorId(
-            
-             @PathVariable Integer id) {
-        Optional<Equipamento> equipamento = equipamentoService.buscarPorId(id);
 
-        if (equipamento.isPresent()) {
-            return ResponseEntity.ok(equipamento.get());
+            @PathVariable Integer id) {
+        Optional<Equipamento> equipamentos = equipamentoService.buscarPorId(id);
 
+        if (equipamentos.isPresent()) {
+            return ResponseEntity.ok(equipamentos.get());
         }
         return ResponseEntity.notFound().build();
     }
@@ -58,7 +59,7 @@ public class EquipamentoController {
     @PutMapping("/{id}")
     public ResponseEntity<Equipamento> atualizar(
             @PathVariable Integer id,
-           @Valid  @RequestBody Equipamento novosDados) {
+            @Valid @RequestBody Equipamento novosDados) {
 
         Optional<Equipamento> equipamentoAtualizado = equipamentoService.atualizar(id, novosDados);
 
