@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 
@@ -15,7 +16,7 @@ import jakarta.validation.constraints.NotBlank;
 public class Equipamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     @NotBlank (message = "O nome do equipamento é obrigatório")
     private String nome;
 
@@ -24,6 +25,8 @@ public class Equipamento {
 
     @ManyToOne 
     @JoinColumn (name = "setor_id", nullable = false)
+    @NotNull (message = "O setor  do esquipametoé obrigatório")
+
     private Setor setor;   
 
     public Equipamento() {
@@ -40,7 +43,7 @@ public class Equipamento {
         this.setor = setor;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -72,4 +75,5 @@ public class Equipamento {
     public void setSetor(Setor setor) {
         this.setor = setor;
     }
+
 }

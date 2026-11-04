@@ -5,23 +5,38 @@ import java.util.Optional;
 
 
 import org.springframework.stereotype.Service;
-
-
+import br.com.ordensservico.aberturaordensservico.model.Setor;
+import br.com.ordensservico.aberturaordensservico.dto.EquipamentoRequest;
 import br.com.ordensservico.aberturaordensservico.model.Equipamento;
 
 import br.com.ordensservico.aberturaordensservico.repository.EquipamentoRepository;
+import br.com.ordensservico.aberturaordensservico.repository.SetorRepository;
 
 @Service 
 
 public class EquipamentoService {
    private final EquipamentoRepository equipamentosRepository;
 
-    public EquipamentoService(EquipamentoRepository equipamentosRepository) {
+    private final SetorRepository SetorRepository;
+
+    public EquipamentoService(EquipamentoRepository equipamentosRepository, SetorRepository setorRepository) {
         this.equipamentosRepository = equipamentosRepository;
+        this.SetorRepository = setorRepository;
     }
 
-    public Equipamento cadastrar(Equipamento equipamento) {
-        return equipamentosRepository.save(equipamento);
+    public Optional <Equipamento> cadastrar(EquipamentoRequest equipamentoRequest) {
+        Optional<Setor> setorEncontrado = SetorRepository.findById(equipamentoRequest.getSetorId());
+
+        if (setorEncontrado.isEmpty()) {
+            return Optional.empty();
+        }
+        Equipamento equipamento = new Equipamento();
+        equipamento.setNome(equipamentoRequest.getNome());
+        equipamento.setNumeroPatrimonio(equipamentoRequest.getNumeroPatrimonio());
+        equipamento.setSetor(setorEncontrado.get());
+
+        return Optional.of(equipamentosRepository.save(equipamento));
+
     }
 
     public List<Equipamento> listar() {
